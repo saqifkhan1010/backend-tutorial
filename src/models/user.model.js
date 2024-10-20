@@ -60,7 +60,7 @@ const userSchema = new Schema(
 )
 
 
-// this middleware is used to encrypt password before saving it to database with the hepl of hook called "pre" and 
+// this middleware is used to encrypt password before saving it to database with the help of hook called "pre" and 
 userSchema.pre("save", async function(next){
     // this if statement will check if the password is changed or modified or not if the password is same it will not use the hash method warna baar baar paasword ko hash karte jayega so password login me same hai ki nahi check karna mushkil ho jayega
     if(!this.isModified("password")) return next();
@@ -73,6 +73,7 @@ userSchema.pre("save", async function(next){
 userSchema.methods.isPasswordCorrect = async function(password){
     return await bcrypt.compare(password, this.password)
 }
+// jwt access token is like an id card of college if it is with you then only you can enter the college so when the user register then it will make a jwt access token and make you use the facility such as lab,library etc.. for some period of time which you have given in your .env file 
 
 userSchema.methods.generateAccessToken = function(){
     return jwt.sign(
@@ -88,6 +89,9 @@ userSchema.methods.generateAccessToken = function(){
         }
     )
 }
+
+
+// this is like an atm card where refresh access token is when you insert your card you will be getting an access token which get expire in some couple of time iske wajah se user ko baar baar login nahi karna padhta 
 userSchema.methods.generateRefreshToken = function(){
     return jwt.sign(
         {
